@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { RotatingDeveloperTitle } from "@/components/rotating-developer-title";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
@@ -13,7 +14,7 @@ export default function HomePage() {
       </div>
 
       {/* Center Card with blurred photo background */}
-      <Card className="relative overflow-hidden max-w-2xl w-full mx-auto bg-card/30 backdrop-blur-xl border-border/50 shadow-2xl">
+      <Card className="relative overflow-hidden max-w-4xl w-full mx-auto bg-card/30 backdrop-blur-xl border-border/50 shadow-2xl">
         {/* Blurred background image */}
         <div
           className="absolute inset-0 -z-10 opacity-30"
@@ -26,22 +27,20 @@ export default function HomePage() {
           }}
         />
 
-        <CardContent className="p-8 sm:p-12 text-center relative z-10">
+        <CardContent className="p-10 sm:p-14 lg:p-16 text-center relative z-10">
           <div className="space-y-6">
             <div className="space-y-2">
-              <p className="text-primary font-medium tracking-wide uppercase text-sm">
+              {/* <p className="text-primary font-medium tracking-wide uppercase text-sm">
                 Welcome to Lawrencelwl's Website
-              </p>
-              <h1 className="text-4xl sm:text-5xl font-bold text-foreground text-balance">
-                Hi, I&apos;m a Developer
-              </h1>
+              </p> */}
+              <RotatingDeveloperTitle />
             </div>
-
+            {/* 
             <p className="text-lg text-muted-foreground max-w-lg mx-auto leading-relaxed">
               I create beautiful and functional web experiences. Passionate
               about clean code, modern design, and building products that make a
               difference.
-            </p>
+            </p> */}
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <Button asChild size="lg" className="group">

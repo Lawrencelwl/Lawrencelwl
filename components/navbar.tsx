@@ -50,28 +50,30 @@ export function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="relative flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="text-xl font-bold text-foreground">
-            Lawrencelwl's Website
+            Lawrencelwl
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  pathname === link.href
-                    ? "text-primary"
-                    : "text-muted-foreground",
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 hidden -translate-y-1/2 md:flex md:items-center md:justify-center">
+            <div className="pointer-events-auto flex items-center gap-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "text-sm font-medium transition-colors hover:text-primary",
+                    pathname === link.href
+                      ? "text-primary"
+                      : "text-muted-foreground",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </div>
 
           {/* Theme Toggle, Auth Buttons & Mobile Menu Button */}

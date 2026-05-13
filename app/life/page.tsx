@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useState, useRef, useEffect } from "react"
-import { PhotoCard } from "@/components/photo-card"
-import { PhotoModal } from "@/components/photo-modal"
-import { useAuth } from "@/contexts/auth-context"
-import { lifePageEvents } from "@/components/navbar"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Upload, X } from "lucide-react"
+import { useState, useRef, useEffect } from "react";
+import { PhotoCard } from "@/components/photo-card";
+import { PhotoModal } from "@/components/photo-modal";
+import { useAuth } from "@/contexts/auth-context";
+import { lifePageEvents } from "@/components/navbar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Upload, X } from "lucide-react";
 
 interface Photo {
-  id: string
-  src: string
-  alt: string
-  description: string
-  date: string
+  id: string;
+  src: string;
+  alt: string;
+  description: string;
+  date: string;
 }
 
 const initialPhotos: Photo[] = [
@@ -24,59 +24,63 @@ const initialPhotos: Photo[] = [
     id: "1",
     src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
     alt: "Mountain landscape",
-    description: "Exploring the beautiful mountains during my summer vacation. The view from the top was absolutely breathtaking!",
+    description:
+      "Exploring the beautiful mountains during my summer vacation. The view from the top was absolutely breathtaking!",
     date: "August 15, 2024",
   },
   {
     id: "2",
     src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
     alt: "Beach sunset",
-    description: "Golden hour at the beach. Nothing beats watching the sunset over the ocean.",
+    description:
+      "Golden hour at the beach. Nothing beats watching the sunset over the ocean.",
     date: "July 22, 2024",
   },
   {
     id: "3",
     src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&q=80",
     alt: "Working on laptop",
-    description: "Late night coding session. Building something amazing with the team!",
+    description:
+      "Late night coding session. Building something amazing with the team!",
     date: "June 10, 2024",
   },
   {
     id: "4",
     src: "https://images.unsplash.com/photo-1493612276216-ee3925520721?w=600&q=80",
     alt: "City at night",
-    description: "City lights from the rooftop. Urban exploration is one of my favorite hobbies.",
+    description:
+      "City lights from the rooftop. Urban exploration is one of my favorite hobbies.",
     date: "May 5, 2024",
   },
-]
+];
 
 export default function LifePage() {
-  const { isAuthenticated } = useAuth()
-  const [photos, setPhotos] = useState<Photo[]>(initialPhotos)
-  const [showUploadForm, setShowUploadForm] = useState(false)
-  const [previewImage, setPreviewImage] = useState<string | null>(null)
-  const [description, setDescription] = useState("")
-  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const { isAuthenticated } = useAuth();
+  const [photos, setPhotos] = useState<Photo[]>(initialPhotos);
+  const [showUploadForm, setShowUploadForm] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [description, setDescription] = useState("");
+  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Subscribe to navbar "Add Photo" button clicks
   useEffect(() => {
     const unsubscribe = lifePageEvents.subscribe((show) => {
-      setShowUploadForm(show)
-    })
-    return unsubscribe
-  }, [])
+      setShowUploadForm(show);
+    });
+    return unsubscribe;
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewImage(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleUpload = () => {
     if (previewImage && description) {
@@ -90,33 +94,33 @@ export default function LifePage() {
           month: "long",
           day: "numeric",
         }),
-      }
-      setPhotos([newPhoto, ...photos])
-      setPreviewImage(null)
-      setDescription("")
-      setShowUploadForm(false)
+      };
+      setPhotos([newPhoto, ...photos]);
+      setPreviewImage(null);
+      setDescription("");
+      setShowUploadForm(false);
       if (fileInputRef.current) {
-        fileInputRef.current.value = ""
+        fileInputRef.current.value = "";
       }
     }
-  }
+  };
 
   const cancelUpload = () => {
-    setPreviewImage(null)
-    setDescription("")
-    setShowUploadForm(false)
+    setPreviewImage(null);
+    setDescription("");
+    setShowUploadForm(false);
     if (fileInputRef.current) {
-      fileInputRef.current.value = ""
+      fileInputRef.current.value = "";
     }
-  }
+  };
 
   const openPhotoModal = (photo: Photo) => {
-    setSelectedPhoto(photo)
-  }
+    setSelectedPhoto(photo);
+  };
 
   const closePhotoModal = () => {
-    setSelectedPhoto(null)
-  }
+    setSelectedPhoto(null);
+  };
 
   return (
     <div className="min-h-screen py-12 px-4">
@@ -124,9 +128,6 @@ export default function LifePage() {
         {/* Page Header */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-foreground">Life</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Moments and memories from my personal life. A visual journey of adventures and experiences.
-          </p>
         </div>
 
         {/* Upload Form - Only shown when authenticated and toggled */}
@@ -211,5 +212,5 @@ export default function LifePage() {
         )}
       </div>
     </div>
-  )
+  );
 }

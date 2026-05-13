@@ -7,14 +7,13 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Lawrencelwl's Website. All rights
-            reserved.
+            &copy; {new Date().getFullYear()} Lawrencelwl. All rights reserved.
           </p>
 
           <div className="flex items-center gap-4">
             <Link
               href="https://github.com"
-              target="_blank"
+              target="https://github.com/Lawrencelwl"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
               aria-label="GitHub"
@@ -23,7 +22,7 @@ export function Footer() {
             </Link>
             <Link
               href="https://linkedin.com"
-              target="_blank"
+              target="https://www.linkedin.com/in/wai-lung-li-5a9452288/"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
               aria-label="LinkedIn"
@@ -31,7 +30,7 @@ export function Footer() {
               <Linkedin className="h-5 w-5" />
             </Link>
             <Link
-              href="mailto:hello@example.com"
+              href="mailto:liwailung321@gmail.com"
               className="text-muted-foreground hover:text-primary transition-colors"
               aria-label="Email"
             >
