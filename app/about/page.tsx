@@ -1,176 +1,206 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { PhotoCard } from "@/components/photo-card";
+import { PhotoModal } from "@/components/photo-modal";
+import { useAuth } from "@/contexts/auth-context";
+import { aboutPhotoEvents } from "@/components/navbar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Briefcase, GraduationCap, Code, User } from "lucide-react";
+import { Upload, X } from "lucide-react";
 
-const workExperience = [
-  {
-    title: "Junior Software Developer (Full time)",
-    company: "Big Boss Taxi",
-    period: "Mar 2025 - Jan 2026",
-    description:
-      "Leading frontend development and architecting scalable web applications.",
-  },
-  {
-    title: "Back-end Developer (Part time)",
-    company: "HXGON SPACE",
-    period: "Sep 2023 - May 2024",
-    description:
-      "Built and maintained full-stack applications using modern technologies.",
-  },
-  {
-    title: "Back-end Developer (Internship)",
-    company: "HXGON SPACE",
-    period: "June 2023 - Aug 2023",
-    description:
-      "Developed back-end applications and collaborated with front-end teams.",
-  },
-];
+interface Photo {
+  id: string;
+  src: string;
+  alt: string;
+  description: string;
+  date: string;
+}
 
-const education = [
+const initialPhotos: Photo[] = [
   {
-    degree: "Bachelor of Science (Hons) in Computer Science",
-    school: "The Hong Kong Polytechnic University (PolyU)",
-    year: "Sep 2021 - Jul 2024",
+    id: "1",
+    src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
+    alt: "Mountain landscape",
+    description:
+      "Exploring the beautiful mountains during my summer vacation. The view from the top was absolutely breathtaking!",
+    date: "August 15, 2024",
   },
   {
-    degree: "Higher Diploma in Software Engineering",
-    school: "Hong Kong Institute of Vocational Education (Tsing Yi)",
-    year: "Sep 2019 - Jul 2021",
+    id: "2",
+    src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+    alt: "Beach sunset",
+    description:
+      "Golden hour at the beach. Nothing beats watching the sunset over the ocean.",
+    date: "July 22, 2024",
   },
   {
-    degree: "Diploma of Vocational Education (Information Technology)",
-    school: "Youth College (Kwai Fong)",
-    year: "Sep 2016 - Jul 2019",
+    id: "3",
+    src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&q=80",
+    alt: "Working on laptop",
+    description:
+      "Late night coding session. Building something amazing with the team!",
+    date: "June 10, 2024",
   },
-];
-
-const skills = [
-  "Java",
-  "Python",
-  "Go",
-  "C++",
-  "C#",
-  "HTML5",
-  "React",
-  "PHP",
-  "CSS",
-  "Tailwind CSS",
-  "JavaScript",
-  "Node.js",
-  "Next.js",
-  "TypeScript",
-  "Flutter",
-  "Firebase",
-  "MySQL",
-  "PostgreSQL",
-  "Git",
-  "Docker",
+  {
+    id: "4",
+    src: "https://images.unsplash.com/photo-1493612276216-ee3925520721?w=600&q=80",
+    alt: "City at night",
+    description:
+      "City lights from the rooftop. Urban exploration is one of my favorite hobbies.",
+    date: "May 5, 2024",
+  },
 ];
 
 export default function AboutPage() {
+  const { isAuthenticated } = useAuth();
+  const [photos, setPhotos] = useState<Photo[]>(initialPhotos);
+  const [showUploadForm, setShowUploadForm] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [description, setDescription] = useState("");
+  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const unsubscribe = aboutPhotoEvents.subscribe((show) => {
+      setShowUploadForm(show);
+    });
+    return unsubscribe;
+  }, []);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUpload = () => {
+    if (previewImage && description) {
+      const newPhoto: Photo = {
+        id: Date.now().toString(),
+        src: previewImage,
+        alt: "User uploaded photo",
+        description: description,
+        date: new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+      };
+      setPhotos([newPhoto, ...photos]);
+      setPreviewImage(null);
+      setDescription("");
+      setShowUploadForm(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const cancelUpload = () => {
+    setPreviewImage(null);
+    setDescription("");
+    setShowUploadForm(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const openPhotoModal = (photo: Photo) => {
+    setSelectedPhoto(photo);
+  };
+
+  const closePhotoModal = () => {
+    setSelectedPhoto(null);
+  };
+
   return (
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-6xl mx-auto space-y-12">
-        {/* Page Header */}
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-foreground">About Me</h1>
+          <h1 className="text-4xl font-bold text-foreground">About</h1>
         </div>
 
-        {/* Short Introduction */}
-        <Card className="bg-card/50 backdrop-blur-sm border-border">
-          <CardHeader className="flex flex-row items-center gap-4">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <User className="h-6 w-6 text-primary" />
-            </div>
-            <CardTitle>Introduction</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground leading-relaxed">
-              I&apos;m a passionate junior software develope. I love turning
-              complex problems into simple, beautiful, and intuitive solutions.
-              When I&apos;m not coding, you can find me learning new skills,
-              enjoying games, or camping with friends.
-            </p>
-          </CardContent>
-        </Card>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Work Experience */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border">
-            <CardHeader className="flex flex-row items-center gap-4">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Briefcase className="h-6 w-6 text-primary" />
-              </div>
-              <CardTitle>Work Experience</CardTitle>
+        {isAuthenticated && showUploadForm && (
+          <Card className="max-w-lg mx-auto bg-card/50 backdrop-blur-sm border-border">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-lg">Upload Photo</CardTitle>
+              <Button variant="ghost" size="icon" onClick={cancelUpload}>
+                <X className="h-4 w-4" />
+              </Button>
             </CardHeader>
-            <CardContent className="space-y-6">
-              {workExperience.map((job, index) => (
-                <div
-                  key={index}
-                  className="relative pl-6 border-l-2 border-border"
-                >
-                  <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary" />
-                  <h3 className="font-semibold text-foreground">{job.title}</h3>
-                  <p className="text-sm text-primary">{job.company}</p>
-                  <p className="text-xs text-muted-foreground mb-2">
-                    {job.period}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {job.description}
-                  </p>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="cursor-pointer"
+                />
+              </div>
+
+              {previewImage && (
+                <div className="relative aspect-square w-full max-w-sm mx-auto rounded-lg overflow-hidden">
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              ))}
+              )}
+
+              <div className="space-y-2">
+                <Textarea
+                  placeholder="Write a description for your photo..."
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  rows={3}
+                />
+              </div>
+
+              <Button
+                onClick={handleUpload}
+                disabled={!previewImage || !description}
+                className="w-full gap-2"
+              >
+                <Upload className="h-4 w-4" />
+                Upload Photo
+              </Button>
             </CardContent>
           </Card>
+        )}
 
-          {/* Education */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border">
-            <CardHeader className="flex flex-row items-center gap-4">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <GraduationCap className="h-6 w-6 text-primary" />
-              </div>
-              <CardTitle>Education</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {education.map((edu, index) => (
-                <div
-                  key={index}
-                  className="relative pl-6 border-l-2 border-border"
-                >
-                  <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary" />
-                  <h3 className="font-semibold text-foreground">
-                    {edu.degree}
-                  </h3>
-                  <p className="text-sm text-primary">{edu.school}</p>
-                  <p className="text-xs text-muted-foreground">{edu.year}</p>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {photos.map((photo) => (
+            <PhotoCard
+              key={photo.id}
+              src={photo.src}
+              alt={photo.alt}
+              description={photo.description}
+              date={photo.date}
+              onClick={() => openPhotoModal(photo)}
+            />
+          ))}
         </div>
 
-        {/* Skills */}
-        <Card className="bg-card/50 backdrop-blur-sm border-border">
-          <CardHeader className="flex flex-row items-center gap-4">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <Code className="h-6 w-6 text-primary" />
-            </div>
-            <CardTitle>Skills</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {skills.map((skill) => (
-                <Badge
-                  key={skill}
-                  variant="secondary"
-                  className="text-sm py-1.5 px-3"
-                >
-                  {skill}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        {selectedPhoto && (
+          <PhotoModal
+            isOpen={!!selectedPhoto}
+            onClose={closePhotoModal}
+            src={selectedPhoto.src}
+            alt={selectedPhoto.alt}
+            description={selectedPhoto.description}
+            date={selectedPhoto.date}
+          />
+        )}
       </div>
     </div>
   );

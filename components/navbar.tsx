@@ -9,15 +9,17 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
 
-// Event emitter for cross-component communication
-export const lifePageEvents = {
+// Event emitter for cross-component communication (About photo gallery)
+export const aboutPhotoEvents = {
   listeners: new Set<(show: boolean) => void>(),
   emit(show: boolean) {
     this.listeners.forEach((listener) => listener(show));
   },
   subscribe(listener: (show: boolean) => void) {
     this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
   },
 };
 
@@ -25,7 +27,6 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/work", label: "Work" },
-  { href: "/life", label: "Life" },
 ];
 
 export function Navbar() {
@@ -35,12 +36,12 @@ export function Navbar() {
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const isLifePage = pathname === "/life";
-  const showLoginButton = isLifePage && !isAuthenticated;
-  const showAuthenticatedButtons = isLifePage && isAuthenticated;
+  const isAboutPage = pathname === "/about";
+  const showLoginButton = isAboutPage && !isAuthenticated;
+  const showAuthenticatedButtons = isAboutPage && isAuthenticated;
 
   const handleAddPhoto = () => {
-    lifePageEvents.emit(true);
+    aboutPhotoEvents.emit(true);
   };
 
   useEffect(() => {

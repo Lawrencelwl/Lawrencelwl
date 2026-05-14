@@ -13,19 +13,19 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/life")
+      router.push("/about")
     }
   }, [isAuthenticated, router])
 
   return (
     <div className="min-h-screen py-12 px-4 flex flex-col items-center justify-center">
       <div className="w-full max-w-md space-y-6">
-        <Link 
-          href="/life" 
+        <Link
+          href="/about"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Life
+          Back to About
         </Link>
         
         <LoginForm />
