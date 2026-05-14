@@ -1,15 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { PhotoCard } from "@/components/photo-card";
 import { PhotoModal } from "@/components/photo-modal";
-import { useAuth } from "@/contexts/auth-context";
-import { aboutPhotoEvents } from "@/components/navbar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Upload, X } from "lucide-react";
 
 interface Photo {
   id: string;
@@ -19,7 +12,7 @@ interface Photo {
   date: string;
 }
 
-const initialPhotos: Photo[] = [
+const photos: Photo[] = [
   {
     id: "1",
     src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
@@ -55,71 +48,7 @@ const initialPhotos: Photo[] = [
 ];
 
 export default function AboutPage() {
-  const { isAuthenticated } = useAuth();
-  const [photos, setPhotos] = useState<Photo[]>(initialPhotos);
-  const [showUploadForm, setShowUploadForm] = useState(false);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [description, setDescription] = useState("");
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const unsubscribe = aboutPhotoEvents.subscribe((show) => {
-      setShowUploadForm(show);
-    });
-    return unsubscribe;
-  }, []);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleUpload = () => {
-    if (previewImage && description) {
-      const newPhoto: Photo = {
-        id: Date.now().toString(),
-        src: previewImage,
-        alt: "User uploaded photo",
-        description: description,
-        date: new Date().toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }),
-      };
-      setPhotos([newPhoto, ...photos]);
-      setPreviewImage(null);
-      setDescription("");
-      setShowUploadForm(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
-  };
-
-  const cancelUpload = () => {
-    setPreviewImage(null);
-    setDescription("");
-    setShowUploadForm(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  const openPhotoModal = (photo: Photo) => {
-    setSelectedPhoto(photo);
-  };
-
-  const closePhotoModal = () => {
-    setSelectedPhoto(null);
-  };
 
   return (
     <div className="min-h-screen py-12 px-4">
@@ -127,56 +56,6 @@ export default function AboutPage() {
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-foreground">About</h1>
         </div>
-
-        {isAuthenticated && showUploadForm && (
-          <Card className="max-w-lg mx-auto bg-card/50 backdrop-blur-sm border-border">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-lg">Upload Photo</CardTitle>
-              <Button variant="ghost" size="icon" onClick={cancelUpload}>
-                <X className="h-4 w-4" />
-              </Button>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="cursor-pointer"
-                />
-              </div>
-
-              {previewImage && (
-                <div className="relative aspect-square w-full max-w-sm mx-auto rounded-lg overflow-hidden">
-                  <img
-                    src={previewImage}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-
-              <div className="space-y-2">
-                <Textarea
-                  placeholder="Write a description for your photo..."
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows={3}
-                />
-              </div>
-
-              <Button
-                onClick={handleUpload}
-                disabled={!previewImage || !description}
-                className="w-full gap-2"
-              >
-                <Upload className="h-4 w-4" />
-                Upload Photo
-              </Button>
-            </CardContent>
-          </Card>
-        )}
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {photos.map((photo) => (
@@ -186,7 +65,7 @@ export default function AboutPage() {
               alt={photo.alt}
               description={photo.description}
               date={photo.date}
-              onClick={() => openPhotoModal(photo)}
+              onClick={() => setSelectedPhoto(photo)}
             />
           ))}
         </div>
@@ -194,7 +73,7 @@ export default function AboutPage() {
         {selectedPhoto && (
           <PhotoModal
             isOpen={!!selectedPhoto}
-            onClose={closePhotoModal}
+            onClose={() => setSelectedPhoto(null)}
             src={selectedPhoto.src}
             alt={selectedPhoto.alt}
             description={selectedPhoto.description}

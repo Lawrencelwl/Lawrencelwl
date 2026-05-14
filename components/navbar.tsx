@@ -3,25 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Sun, Moon, Menu, X, LogIn, Plus, LogOut } from "lucide-react";
+import { Sun, Moon, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/contexts/auth-context";
-
-// Event emitter for cross-component communication (About photo gallery)
-export const aboutPhotoEvents = {
-  listeners: new Set<(show: boolean) => void>(),
-  emit(show: boolean) {
-    this.listeners.forEach((listener) => listener(show));
-  },
-  subscribe(listener: (show: boolean) => void) {
-    this.listeners.add(listener);
-    return () => {
-      this.listeners.delete(listener);
-    };
-  },
-};
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -32,17 +17,8 @@ const navLinks = [
 export function Navbar() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
-  const { isAuthenticated, logout } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const isAboutPage = pathname === "/about";
-  const showLoginButton = isAboutPage && !isAuthenticated;
-  const showAuthenticatedButtons = isAboutPage && isAuthenticated;
-
-  const handleAddPhoto = () => {
-    aboutPhotoEvents.emit(true);
-  };
 
   useEffect(() => {
     setMounted(true);
@@ -77,46 +53,8 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Theme Toggle, Auth Buttons & Mobile Menu Button */}
+          {/* Theme Toggle & Mobile Menu Button */}
           <div className="flex items-center gap-2">
-            {/* Authenticated buttons - Add Photo & Logout */}
-            {mounted && showAuthenticatedButtons && (
-              <>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleAddPhoto}
-                  aria-label="Add new photo"
-                  title="Add new photo"
-                >
-                  <Plus className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={logout}
-                  aria-label="Logout"
-                  title="Logout"
-                >
-                  <LogOut className="h-5 w-5" />
-                </Button>
-              </>
-            )}
-            {/* Login button - only when not authenticated */}
-            {mounted && showLoginButton && (
-              <Button
-                variant="ghost"
-                size="icon"
-                asChild
-                aria-label="Go to login"
-                title="Go to login"
-              >
-                <Link href="/login">
-                  <LogIn className="h-5 w-5" />
-                </Link>
-              </Button>
-            )}
-            {/* Theme toggle */}
             {mounted && (
               <Button
                 variant="ghost"
@@ -132,7 +70,6 @@ export function Navbar() {
               </Button>
             )}
 
-            {/* Mobile Menu Button */}
             <Button
               variant="ghost"
               size="icon"
