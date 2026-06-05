@@ -28,7 +28,15 @@ export default function HomePage() {
         />
 
         <p className="absolute bottom-3 right-4 z-20 text-[10px] sm:text-xs text-foreground/60">
-          Artwork by <a href="https://x.com/yukimushiart">@yukimushiart</a>
+          Artwork by{" "}
+          <a
+            href="https://x.com/yukimushiart"
+            className="underline text-sky-300 hover:text-sky-200"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @yukimushiart
+          </a>
         </p>
 
         <CardContent className="p-10 sm:p-14 lg:p-16 text-center relative z-10">
