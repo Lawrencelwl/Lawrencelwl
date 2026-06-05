@@ -27,7 +27,7 @@ const projects = [
     ],
   },
   {
-    title: "japship",
+    title: "Japship",
     description:
       "A full-featured online shopping platform with cart management, payment processing, and order tracking. Built for scalability and performance.",
     technologies: ["PHP", "CSS", "JavaScript", "Docker", "MySQL", "AWS RDS"],
