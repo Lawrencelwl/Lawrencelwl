@@ -4,7 +4,11 @@ import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { getBasePath } from "@/lib/base-path";
 import "./globals.css";
+
+const basePath =
+  process.env.STATIC_EXPORT === "1" ? getBasePath() : "";
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -12,6 +16,10 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Lawrencelwl",
   description: "Lawrencelwl — personal site showcasing work and life",
+  icons: {
+    icon: `${basePath}/icon.png`,
+    apple: `${basePath}/apple-icon.png`,
+  },
 };
 
 export default function RootLayout({
@@ -21,6 +29,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href={`${basePath}/icon.png`} type="image/png" />
+        <link
+          rel="apple-touch-icon"
+          href={`${basePath}/apple-icon.png`}
+          type="image/png"
+        />
+      </head>
       <body className="font-sans antialiased min-h-screen flex flex-col bg-background">
         <ThemeProvider
           attribute="class"
