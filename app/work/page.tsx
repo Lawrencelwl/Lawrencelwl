@@ -27,7 +27,7 @@ const projects = [
     ],
   },
   {
-    title: "Soctify - an E-Commerce Platform",
+    title: "japship",
     description:
       "A full-featured online shopping platform with cart management, payment processing, and order tracking. Built for scalability and performance.",
     technologies: ["PHP", "CSS", "JavaScript", "Docker", "MySQL", "AWS RDS"],
@@ -50,6 +50,36 @@ const projects = [
       "PostgreSQL",
     ],
   },
+  // {
+  //   title: "",
+  //   description: "",
+  //   technologies: [],
+  // },
+  // {
+  //   title: "",
+  //   description: "",
+  //   technologies: [],
+  // },
+  // {
+  //   title: "",
+  //   description: "",
+  //   technologies: [],
+  // },
+  // {
+  //   title: "",
+  //   description: "",
+  //   technologies: [],
+  // },
+  // {
+  //   title: "",
+  //   description: "",
+  //   technologies: [],
+  // },
+  // {
+  //   title: "",
+  //   description: "",
+  //   technologies: [],
+  // },
 ];
 
 export default function WorkPage() {
