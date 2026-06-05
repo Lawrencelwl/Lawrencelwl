@@ -19,7 +19,7 @@ const projects = [
       "A system that enables automatic T+1 settlement for taxi online payments, with daily report generation and secure data storage.",
     technologies: [
       "Python",
-      "Yenpay API",
+      "Yedpay API",
       "Octopus API",
       "MySQL",
       "Docker",
@@ -37,6 +37,18 @@ const projects = [
     description:
       "A mobile app that allows users to access news from various media platforms, with features like Google account login and the ability to bookmark favorite articles for quick access.",
     technologies: ["Flutter", "Firebase"],
+  },
+  {
+    title: "Hx Blog",
+    description:
+      "A blog website for companies to share IT-related news, insights, and updates.",
+    technologies: [
+      "React",
+      "Next.js",
+      "Tailwind CSS",
+      "Strapi API",
+      "PostgreSQL",
+    ],
   },
 ];
 

@@ -20,12 +20,16 @@ export default function HomePage() {
           className="absolute inset-0 -z-10 opacity-30"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80')",
+              "url('https://res.cloudinary.com/dy3mkzbam/image/upload/v1780666224/HomePage/%E5%A7%86%E8%A5%BF_p1wpfa.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             filter: "blur(8px)",
           }}
         />
+
+        <p className="absolute bottom-3 right-4 z-20 text-[10px] sm:text-xs text-foreground/60">
+          Artwork by <a href="https://x.com/yukimushiart">@yukimushiart</a>
+        </p>
 
         <CardContent className="p-10 sm:p-14 lg:p-16 text-center relative z-10">
           <div className="space-y-6">
