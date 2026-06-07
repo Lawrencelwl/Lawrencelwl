@@ -50,11 +50,12 @@ const projects = [
       "PostgreSQL",
     ],
   },
-  // {
-  //   title: "",
-  //   description: "",
-  //   technologies: [],
-  // },
+  {
+    title: "Soctify ",
+    description:
+      "A social media platform that allows users to connect with friends and family through real-time chat, personalized accounts, and the ability to share photos, text updates, like posts, and build their own network of friends.",
+    technologies: ["PHP", "CSS", "JavaScript", "MySQL", "Docker", "AWS bucket"],
+  },
   // {
   //   title: "",
   //   description: "",
